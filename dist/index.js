@@ -4303,13 +4303,11 @@ function assignDistributionSetToTargetFilter(targetFilterId, distributionSetId, 
         const url = `${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`;
         core.info(`Assigning Distribution Set with id ${distributionSetId} to targetFilter ${targetFilterId}`);
         try {
-            const response = yield axios_1.default.post(url, [
-                {
-                    weight,
-                    type,
-                    id: distributionSetId
-                }
-            ], {
+            const response = yield axios_1.default.post(url, {
+                weight,
+                type,
+                id: distributionSetId
+            }, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: getBasicAuthHeader()

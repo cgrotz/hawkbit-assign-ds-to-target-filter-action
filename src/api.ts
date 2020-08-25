@@ -123,13 +123,11 @@ export async function assignDistributionSetToTargetFilter(
   try {
     const response = await Axios.post(
       url,
-      [
-        {
-          weight,
-          type,
-          id: distributionSetId
-        }
-      ],
+      {
+        weight,
+        type,
+        id: distributionSetId
+      },
       {
         headers: {
           'Content-Type': 'application/json',
