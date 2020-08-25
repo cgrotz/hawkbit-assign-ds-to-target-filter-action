@@ -1,0 +1,31 @@
+name: 'Eclipse Hawkbit assign Distribution Set to Target Filter Action'
+description: 'GitHub Action for assign distribution sets to target filters in Hawkbit.'
+inputs:
+  hawkbit-host-url: 
+    description: 'Base URL of the Hawkbit instance to use'
+    required: true
+    default: 'https://api.eu1.bosch-iot-rollouts.com'
+  hawkbit-tenant: 
+    description: 'Tenant of the Hawkbit Instance'
+    required: true
+  hawkbit-username: 
+    description: 'Username of the Hawkbit Instance'
+    required: true
+  hawkbit-password: 
+    description: 'Password of the Hawkbit Instance'
+    required: true
+  distribution-set-id:
+    description: 'If you want to assign the software module to a distribution set you can set this input variable'
+    required: false
+  target-filter-id:
+    description: 'ID of the target filter the distribution set should be assigned to'
+    required: false
+  target-filter-type:
+    description: 'Type of the assignment froced, soft, ...'
+    required: false
+  target-filter-weight:
+    description: 'Weight of the target filter assignment e.g. 200'
+    required: false
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
