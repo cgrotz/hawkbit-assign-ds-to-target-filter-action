@@ -524,7 +524,8 @@ function run() {
             if (targetFilterPage) {
                 const targetFilterId = targetFilterPage === null || targetFilterPage === void 0 ? void 0 : targetFilterPage.content[0].id;
                 if (targetFilterId) {
-                    api_1.assignDistributionSetToTargetFilter(targetFilterId, parseInt(distributionSetId), typeString, weight);
+                    yield api_1.deleteDistributionSetFromTargetFilter(targetFilterId);
+                    yield api_1.assignDistributionSetToTargetFilter(targetFilterId, parseInt(distributionSetId), typeString, weight);
                 }
                 else {
                     core.setFailed(`Couldn't retrive target filter with name ${targetFilterName}`);
@@ -4266,7 +4267,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignDistributionSetToTargetFilter = exports.getTargetFilters = exports.AssignmentType = void 0;
+exports.deleteDistributionSetFromTargetFilter = exports.assignDistributionSetToTargetFilter = exports.getTargetFilters = exports.AssignmentType = void 0;
 const core = __importStar(__webpack_require__(186));
 const axios_1 = __importDefault(__webpack_require__(545));
 function getBasicAuthHeader() {
@@ -4322,6 +4323,27 @@ function assignDistributionSetToTargetFilter(targetFilterId, distributionSetId, 
     });
 }
 exports.assignDistributionSetToTargetFilter = assignDistributionSetToTargetFilter;
+function deleteDistributionSetFromTargetFilter(targetFilterId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const hawkbitHostUrl = core.getInput('hawkbit-host-url');
+        const url = `${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`;
+        core.info(`Clearing Distribution Set from targetFilter ${targetFilterId}`);
+        try {
+            const response = yield axios_1.default.delete(url, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: getBasicAuthHeader()
+                }
+            });
+            return response.data;
+        }
+        catch (error) {
+            core.setFailed(`Failed creating distribution set ${error} ${JSON.stringify(error.response.data)}`);
+            return null;
+        }
+    });
+}
+exports.deleteDistributionSetFromTargetFilter = deleteDistributionSetFromTargetFilter;
 
 
 /***/ })

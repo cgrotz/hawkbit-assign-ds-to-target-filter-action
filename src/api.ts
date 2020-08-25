@@ -145,3 +145,29 @@ export async function assignDistributionSetToTargetFilter(
     return null
   }
 }
+
+export async function deleteDistributionSetFromTargetFilter(
+  targetFilterId: number
+): Promise<null> {
+  const hawkbitHostUrl = core.getInput('hawkbit-host-url')
+
+  const url = `${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`
+
+  core.info(`Clearing Distribution Set from targetFilter ${targetFilterId}`)
+  try {
+    const response = await Axios.delete(url, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: getBasicAuthHeader()
+      }
+    })
+    return response.data
+  } catch (error) {
+    core.setFailed(
+      `Failed creating distribution set ${error} ${JSON.stringify(
+        error.response.data
+      )}`
+    )
+    return null
+  }
+}

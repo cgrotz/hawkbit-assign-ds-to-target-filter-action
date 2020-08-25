@@ -1,5 +1,9 @@
 import * as core from '@actions/core'
-import {assignDistributionSetToTargetFilter, getTargetFilters} from './api'
+import {
+  assignDistributionSetToTargetFilter,
+  deleteDistributionSetFromTargetFilter,
+  getTargetFilters
+} from './api'
 
 async function run(): Promise<void> {
   try {
@@ -11,7 +15,8 @@ async function run(): Promise<void> {
     if (targetFilterPage) {
       const targetFilterId = targetFilterPage?.content[0].id
       if (targetFilterId) {
-        assignDistributionSetToTargetFilter(
+        await deleteDistributionSetFromTargetFilter(targetFilterId)
+        await assignDistributionSetToTargetFilter(
           targetFilterId,
           parseInt(distributionSetId),
           typeString,
