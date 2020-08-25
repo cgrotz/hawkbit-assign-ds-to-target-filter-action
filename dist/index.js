@@ -4280,7 +4280,7 @@ var AssignmentType;
 function getTargetFilters(targetFilterName) {
     return __awaiter(this, void 0, void 0, function* () {
         const hawkbitHostUrl = core.getInput('hawkbit-host-url');
-        const url = `https://${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`;
+        const url = `${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`;
         const response = yield axios_1.default.get(url, {
             headers: {
                 'Content-Type': 'application/json',
@@ -4294,7 +4294,7 @@ exports.getTargetFilters = getTargetFilters;
 function assignDistributionSetToTargetFilter(targetFilterId, distributionSetId, type, weight = 200) {
     return __awaiter(this, void 0, void 0, function* () {
         const hawkbitHostUrl = core.getInput('hawkbit-host-url');
-        const url = `https://${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`;
+        const url = `${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`;
         core.info(`Assigning Distribution Set with id ${distributionSetId} to targetFilter ${targetFilterId}`);
         const response = yield axios_1.default.post(url, [
             {

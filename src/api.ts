@@ -94,7 +94,7 @@ export async function getTargetFilters(
 ): Promise<Page | null> {
   const hawkbitHostUrl = core.getInput('hawkbit-host-url')
 
-  const url = `https://${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`
+  const url = `${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`
 
   const response = await Axios.get(url, {
     headers: {
@@ -113,7 +113,7 @@ export async function assignDistributionSetToTargetFilter(
 ): Promise<DistributionSet | null> {
   const hawkbitHostUrl = core.getInput('hawkbit-host-url')
 
-  const url = `https://${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`
+  const url = `${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`
 
   core.info(
     `Assigning Distribution Set with id ${distributionSetId} to targetFilter ${targetFilterId}`
