@@ -120,21 +120,30 @@ export async function assignDistributionSetToTargetFilter(
   core.info(
     `Assigning Distribution Set with id ${distributionSetId} to targetFilter ${targetFilterId}`
   )
-  const response = await Axios.post(
-    url,
-    [
+  try {
+    const response = await Axios.post(
+      url,
+      [
+        {
+          weight,
+          type,
+          id: distributionSetId
+        }
+      ],
       {
-        weight,
-        type,
-        id: distributionSetId
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: getBasicAuthHeader()
+        }
       }
-    ],
-    {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: getBasicAuthHeader()
-      }
-    }
-  )
-  return response.data
+    )
+    return response.data
+  } catch (error) {
+    core.setFailed(
+      `Failed creating distribution set ${error} ${JSON.stringify(
+        error.response.data
+      )}`
+    )
+    return null
+  }
 }

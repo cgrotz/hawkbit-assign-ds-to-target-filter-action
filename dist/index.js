@@ -4302,19 +4302,25 @@ function assignDistributionSetToTargetFilter(targetFilterId, distributionSetId, 
         const hawkbitHostUrl = core.getInput('hawkbit-host-url');
         const url = `${hawkbitHostUrl}/rest/v1/targetfilters/${targetFilterId}/autoAssignDS`;
         core.info(`Assigning Distribution Set with id ${distributionSetId} to targetFilter ${targetFilterId}`);
-        const response = yield axios_1.default.post(url, [
-            {
-                weight,
-                type,
-                id: distributionSetId
-            }
-        ], {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: getBasicAuthHeader()
-            }
-        });
-        return response.data;
+        try {
+            const response = yield axios_1.default.post(url, [
+                {
+                    weight,
+                    type,
+                    id: distributionSetId
+                }
+            ], {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: getBasicAuthHeader()
+                }
+            });
+            return response.data;
+        }
+        catch (error) {
+            core.setFailed(`Failed creating distribution set ${error} ${JSON.stringify(error.response.data)}`);
+            return null;
+        }
     });
 }
 exports.assignDistributionSetToTargetFilter = assignDistributionSetToTargetFilter;
