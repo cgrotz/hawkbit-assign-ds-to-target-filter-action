@@ -4280,7 +4280,8 @@ var AssignmentType;
 function getTargetFilters(targetFilterName) {
     return __awaiter(this, void 0, void 0, function* () {
         const hawkbitHostUrl = core.getInput('hawkbit-host-url');
-        const url = `${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`;
+        const url = `${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D'${targetFilterName}'`;
+        core.info(`retrieving target filter by name`);
         const response = yield axios_1.default.get(url, {
             headers: {
                 'Content-Type': 'application/json',

@@ -94,7 +94,9 @@ export async function getTargetFilters(
 ): Promise<Page | null> {
   const hawkbitHostUrl = core.getInput('hawkbit-host-url')
 
-  const url = `${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`
+  const url = `${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D'${targetFilterName}'`
+
+  core.info(`retrieving target filter by name`)
 
   const response = await Axios.get(url, {
     headers: {
