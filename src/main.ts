@@ -8,17 +8,23 @@ async function run(): Promise<void> {
     const weight: number = parseInt(core.getInput('target-filter-weight'))
     const targetFilterName: string = core.getInput('target-filter-name')
     const targetFilterPage = await getTargetFilters(targetFilterName)
-    const targetFilterId = targetFilterPage?.content[1].id
-    if (targetFilterId) {
-      assignDistributionSetToTargetFilter(
-        targetFilterId,
-        parseInt(distributionSetId),
-        typeString,
-        weight
-      )
+    if (targetFilterPage) {
+      const targetFilterId = targetFilterPage?.content[0].id
+      if (targetFilterId) {
+        assignDistributionSetToTargetFilter(
+          targetFilterId,
+          parseInt(distributionSetId),
+          typeString,
+          weight
+        )
+      } else {
+        core.setFailed(
+          `Couldn't retrive target filter with name ${targetFilterName}`
+        )
+      }
     } else {
       core.setFailed(
-        `Couldn't retrive target filter with name ${targetFilterName}`
+        `Couldn't retrieve target filter with name ${targetFilterName}`
       )
     }
   } catch (error) {

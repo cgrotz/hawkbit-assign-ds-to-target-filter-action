@@ -521,12 +521,17 @@ function run() {
             const weight = parseInt(core.getInput('target-filter-weight'));
             const targetFilterName = core.getInput('target-filter-name');
             const targetFilterPage = yield api_1.getTargetFilters(targetFilterName);
-            const targetFilterId = targetFilterPage === null || targetFilterPage === void 0 ? void 0 : targetFilterPage.content[1].id;
-            if (targetFilterId) {
-                api_1.assignDistributionSetToTargetFilter(targetFilterId, parseInt(distributionSetId), typeString, weight);
+            if (targetFilterPage) {
+                const targetFilterId = targetFilterPage === null || targetFilterPage === void 0 ? void 0 : targetFilterPage.content[0].id;
+                if (targetFilterId) {
+                    api_1.assignDistributionSetToTargetFilter(targetFilterId, parseInt(distributionSetId), typeString, weight);
+                }
+                else {
+                    core.setFailed(`Couldn't retrive target filter with name ${targetFilterName}`);
+                }
             }
             else {
-                core.setFailed(`Couldn't retrive target filter with name ${targetFilterName}`);
+                core.setFailed(`Couldn't retrieve target filter with name ${targetFilterName}`);
             }
         }
         catch (error) {
