@@ -17,8 +17,8 @@ inputs:
   distribution-set-id:
     description: 'If you want to assign the software module to a distribution set you can set this input variable'
     required: false
-  target-filter-id:
-    description: 'ID of the target filter the distribution set should be assigned to'
+  target-filter-name:
+    description: 'Name of the target filter the distribution set should be assigned to'
     required: false
   target-filter-type:
     description: 'Type of the assignment froced, soft, ...'

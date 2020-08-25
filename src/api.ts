@@ -64,6 +64,47 @@ export enum AssignmentType {
   soft,
   downloadonly
 }
+export interface TargetFilterSelf {
+  href: string
+}
+
+export interface TargetFilterLinks {
+  self: TargetFilterSelf
+}
+export interface TargetFilter {
+  createdBy: string
+  createdAt: number
+  lastModifiedBy: string
+  lastModifiedAt: number
+  name: string
+  query: string
+  autoAssignDistributionSet: number
+  autoAssignActionType: string
+  _links: TargetFilterLinks
+  id: number
+}
+export interface Page {
+  content: TargetFilter[]
+  total: number
+  size: number
+}
+
+export async function getTargetFilters(
+  targetFilterName: string
+): Promise<Page | null> {
+  const hawkbitHostUrl = core.getInput('hawkbit-host-url')
+
+  const url = `https://${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`
+
+  const response = await Axios.get(url, {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: getBasicAuthHeader()
+    }
+  })
+  return response.data
+}
+
 export async function assignDistributionSetToTargetFilter(
   targetFilterId: number,
   distributionSetId: number,

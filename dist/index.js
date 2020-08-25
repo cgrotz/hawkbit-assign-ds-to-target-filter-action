@@ -517,10 +517,17 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const distributionSetId = core.getInput('distribution-set-id');
-            const targetFilterId = core.getInput('target-filter-id');
             const typeString = core.getInput('target-filter-type');
             const weight = parseInt(core.getInput('target-filter-weight'));
-            api_1.assignDistributionSetToTargetFilter(parseInt(targetFilterId), parseInt(distributionSetId), typeString, weight);
+            const targetFilterName = core.getInput('target-filter-name');
+            const targetFilterPage = yield api_1.getTargetFilters(targetFilterName);
+            const targetFilterId = targetFilterPage === null || targetFilterPage === void 0 ? void 0 : targetFilterPage.content[1].id;
+            if (targetFilterId) {
+                api_1.assignDistributionSetToTargetFilter(targetFilterId, parseInt(distributionSetId), typeString, weight);
+            }
+            else {
+                core.setFailed(`Couldn't retrive target filter with name ${targetFilterName}`);
+            }
         }
         catch (error) {
             core.setFailed(error.message);
@@ -4254,7 +4261,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.assignDistributionSetToTargetFilter = exports.AssignmentType = void 0;
+exports.assignDistributionSetToTargetFilter = exports.getTargetFilters = exports.AssignmentType = void 0;
 const core = __importStar(__webpack_require__(186));
 const axios_1 = __importDefault(__webpack_require__(545));
 function getBasicAuthHeader() {
@@ -4270,6 +4277,20 @@ var AssignmentType;
     AssignmentType[AssignmentType["soft"] = 1] = "soft";
     AssignmentType[AssignmentType["downloadonly"] = 2] = "downloadonly";
 })(AssignmentType = exports.AssignmentType || (exports.AssignmentType = {}));
+function getTargetFilters(targetFilterName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const hawkbitHostUrl = core.getInput('hawkbit-host-url');
+        const url = `https://${hawkbitHostUrl}/rest/v1/targetfilters?limit=1&q=name%3D%3D${targetFilterName}`;
+        const response = yield axios_1.default.get(url, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: getBasicAuthHeader()
+            }
+        });
+        return response.data;
+    });
+}
+exports.getTargetFilters = getTargetFilters;
 function assignDistributionSetToTargetFilter(targetFilterId, distributionSetId, type, weight = 200) {
     return __awaiter(this, void 0, void 0, function* () {
         const hawkbitHostUrl = core.getInput('hawkbit-host-url');
